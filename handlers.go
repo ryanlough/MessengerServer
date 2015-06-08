@@ -11,6 +11,9 @@ import (
     "io/ioutil"
 )
 
+// Index is currently a placeholder for when the root
+// server is hit. Simply displays "Welcome!" at the
+// moment
 func Index(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintln(w, "Welcome!")
 }
