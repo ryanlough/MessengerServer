@@ -6,6 +6,10 @@ import (
     "github.com/gorilla/mux"
 )
 
+// NewRouter creates a new router which handles
+// what to do when a given route is called and
+// passes this information to be used by the
+// handler.
 func NewRouter() *mux.Router {
     router := mux.NewRouter().StrictSlash(true)
     for _, route := range routes {
