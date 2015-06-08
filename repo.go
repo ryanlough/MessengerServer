@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+    "fmt"
+    "time"
+)
 
 var currentId int
 
@@ -8,8 +11,8 @@ var todos Todos
 
 // Give us some seed data
 func init() {
-    RepoCreateTodo(Todo{Name: "Write presentation"})
-    RepoCreateTodo(Todo{Name: "Host meetup"})
+//    RepoCreateTodo(Todo{Name: "Write presentation", Message: "Hi"})
+//    RepoCreateTodo(Todo{Name: "Host meetup"})
 }
 
 func RepoFindTodo(id int) Todo {
@@ -25,6 +28,7 @@ func RepoFindTodo(id int) Todo {
 func RepoCreateTodo(t Todo) Todo {
     currentId += 1
     t.Id = currentId
+    t.Time = time.Now().Local()
     todos = append(todos, t)
     return t
 }
