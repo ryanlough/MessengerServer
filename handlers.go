@@ -4,6 +4,7 @@ import (
     "encoding/json"
     "fmt"
     "net/http"
+    "strconv"
 
     "github.com/gorilla/mux"
 
@@ -18,6 +19,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintln(w, "Welcome!")
 }
 
+// TodoIndex returns the entire repo of messages.
 func TodoIndex(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")
     w.WriteHeader(http.StatusOK)
@@ -27,12 +29,22 @@ func TodoIndex(w http.ResponseWriter, r *http.Request) {
     }
 }
 
+// TodoShow returns the message with the given Id.
 func TodoShow(w http.ResponseWriter, r *http.Request) {
     vars := mux.Vars(r)
     todoId := vars["todoId"]
-    fmt.Fprintln(w, "Todo show:", todoId)
+
+    i, err := strconv.Atoi(todoId);
+
+    if err != nil {
+        panic(err)
+    }
+
+    message := RepoFindTodo(i)
+    fmt.Fprintln(w, message)
 }
 
+// Creates a new message and adds it to the repo.
 func TodoCreate(w http.ResponseWriter, r *http.Request) {
     var todo Todo
     body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
