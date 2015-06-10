@@ -40,8 +40,12 @@ func TodoShow(w http.ResponseWriter, r *http.Request) {
         panic(err)
     }
 
+    w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+    w.WriteHeader(http.StatusOK)
     message := RepoFindTodo(i)
-    fmt.Fprintln(w, message)
+    if err := json.NewEncoder(w).Encode(message); err != nil {
+        panic(err)
+    }
 }
 
 // Creates a new message and adds it to the repo.
