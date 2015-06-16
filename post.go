@@ -2,11 +2,11 @@ package main
 
 import "time"
 
-type Todo struct {
+type Post struct {
     Id        int       `json:"id"`
     Name      string    `json:"name"`
     Message   string    `json:"message"`
     Time      time.Time `json:"time"`
 }
 
-type Todos []Todo
+type Posts []Post

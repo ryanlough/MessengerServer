@@ -7,38 +7,37 @@ import (
 
 var currentId int
 
-var todos Todos
+var posts Posts
 
-// Give us some seed data
+// Used to initialize the repo with data. Empty at the moment.
 func init() {
-//    RepoCreateTodo(Todo{Name: "Write presentation", Message: "Hi"})
-//    RepoCreateTodo(Todo{Name: "Host meetup"})
+
 }
 
-func RepoFindTodo(id int) Todo {
-    for _, t := range todos {
-        if t.Id == id {
-            return t
+func RepoFindPost(id int) Post {
+    for _, p := range posts {
+        if p.Id == id {
+            return p
         }
     }
-    // return empty Todo if not found
-    return Todo{}
+    // return empty Post if not found
+    return Post{}
 }
 
-func RepoCreateTodo(t Todo) Todo {
+func RepoCreatePost(p Post) Post {
     currentId += 1
-    t.Id = currentId
-    t.Time = time.Now().Local()
-    todos = append(todos, t)
-    return t
+    p.Id = currentId
+    p.Time = time.Now().Local()
+    posts = append(posts, p)
+    return p 
 }
 
-func RepoDestroyTodo(id int) error {
-    for i, t := range todos {
-        if t.Id == id {
-            todos = append(todos[:i], todos[i+1:]...)
+func RepoDestroyPost(id int) error {
+    for i, p := range posts {
+        if p.Id == id {
+            posts = append(posts[:i], posts[i+1:]...)
             return nil
         }
     }
-    return fmt.Errorf("Could not find Todo with id of %d to delete", id)
+    return fmt.Errorf("Could not find Post with id of %d to delete", id)
 }

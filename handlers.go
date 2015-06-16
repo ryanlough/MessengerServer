@@ -19,22 +19,22 @@ func Index(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintln(w, "Welcome!")
 }
 
-// TodoIndex returns the entire repo of messages.
-func TodoIndex(w http.ResponseWriter, r *http.Request) {
+// PostIndex returns the entire repo of messages.
+func PostIndex(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")
     w.WriteHeader(http.StatusOK)
 
-    if err := json.NewEncoder(w).Encode(todos); err != nil {
+    if err := json.NewEncoder(w).Encode(posts); err != nil {
         panic(err)
     }
 }
 
-// TodoShow returns the message with the given Id.
-func TodoShow(w http.ResponseWriter, r *http.Request) {
+// PostShow returns the message with the given Id.
+func PostShow(w http.ResponseWriter, r *http.Request) {
     vars := mux.Vars(r)
-    todoId := vars["todoId"]
+    postId := vars["postId"]
 
-    i, err := strconv.Atoi(todoId);
+    i, err := strconv.Atoi(postId);
 
     if err != nil {
         panic(err)
@@ -42,15 +42,15 @@ func TodoShow(w http.ResponseWriter, r *http.Request) {
 
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")
     w.WriteHeader(http.StatusOK)
-    message := RepoFindTodo(i)
+    message := RepoFindPost(i)
     if err := json.NewEncoder(w).Encode(message); err != nil {
         panic(err)
     }
 }
 
 // Creates a new message and adds it to the repo.
-func TodoCreate(w http.ResponseWriter, r *http.Request) {
-    var todo Todo
+func PostCreate(w http.ResponseWriter, r *http.Request) {
+    var post Post
     body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
     if err != nil {
         panic(err)
@@ -58,7 +58,7 @@ func TodoCreate(w http.ResponseWriter, r *http.Request) {
     if err := r.Body.Close(); err != nil {
         panic(err)
     }
-    if err := json.Unmarshal(body, &todo); err != nil {
+    if err := json.Unmarshal(body, &post); err != nil {
         w.Header().Set("Content-Type", "application/json; charset=UTF-8")
         w.WriteHeader(422) // unprocessable entity
         if err := json.NewEncoder(w).Encode(err); err != nil {
@@ -66,7 +66,7 @@ func TodoCreate(w http.ResponseWriter, r *http.Request) {
         }
     }
 
-    t := RepoCreateTodo(todo)
+    t := RepoCreatePost(post)
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")
     w.WriteHeader(http.StatusCreated)
     if err := json.NewEncoder(w).Encode(t); err != nil {
