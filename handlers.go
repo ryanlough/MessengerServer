@@ -7,6 +7,7 @@ import (
     "strconv"
 
     "github.com/gorilla/mux"
+    "github.com/alexjlockwood/gcm"
 
     "io"
     "io/ioutil"
@@ -72,4 +73,22 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
     if err := json.NewEncoder(w).Encode(t); err != nil {
         panic(err)
     }
+
+
+
+    //GCM Stuff...neat
+    data := map[string]interface{}{"id": post.Id}
+    regIDs := []string{"0"}
+    msg := gcm.NewMessage(data, regIDs...)
+
+    sender := &gcm.Sender{ApiKey: "sample_api_key"}
+
+    response, err := sender.Send(msg, 2)
+    if err != nil {
+        fmt.Println("Failed to send GCM message:", err)
+        return
+    }
+
+    fmt.Println("MEEP", response)
+
 }
