@@ -13,6 +13,8 @@ import (
     "io/ioutil"
 )
 
+var regIDs = []string{}
+
 // Index is currently a placeholder for when the root
 // server is hit. Simply displays "Welcome!" at the
 // moment
@@ -78,17 +80,34 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 
     //GCM Stuff...neat
     data := map[string]interface{}{"id": post.Id}
-    regIDs := []string{"0"}
     msg := gcm.NewMessage(data, regIDs...)
 
-    sender := &gcm.Sender{ApiKey: "sample_api_key"}
+    sender := &gcm.Sender{ApiKey: "AIzaSyAhitRnQVKmwtPeiJX9TQKkzkKdaJznrEM"}
 
     response, err := sender.Send(msg, 2)
     if err != nil {
         fmt.Println("Failed to send GCM message:", err)
         return
     }
+}
 
-    fmt.Println("MEEP", response)
+//Registers a new device with the server (for GCM)
+func PostRegister(w http.ResponseWriter, r *http.Request) {
+    var post Post
+    body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+    if err != nil {
+        panic(err)
+    }
+    if err := r.Body.Close(); err != nil {
+        panic(err)
+    }
+    if err := json.Unmarshal(body, &post); err != nil {
+        w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+        w.WriteHeader(422) // unprocessable entity
+        if err := json.NewEncoder(w).Encode(err); err != nil {
+            panic(err)
+        }
+    }
 
+    regIDs = append(regIDs, post.Message)
 }
