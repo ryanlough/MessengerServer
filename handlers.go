@@ -79,14 +79,13 @@ func PostCreate(w http.ResponseWriter, r *http.Request) {
 
 
     //GCM Stuff...neat
-    data := map[string]interface{}{"id": post.Id}
+    data := map[string]interface{}{"name": post.Name, "message": post.Message}
     msg := gcm.NewMessage(data, regIDs...)
 
     sender := &gcm.Sender{ApiKey: "AIzaSyAhitRnQVKmwtPeiJX9TQKkzkKdaJznrEM"}
 
-    response, err := sender.Send(msg, 2)
-    if err != nil {
-        fmt.Println("Failed to send GCM message:", err)
+    if result, err := sender.Send(msg, 2); err != nil {
+        fmt.Println("Failed to send GCM message:", err, result)
         return
     }
 }
