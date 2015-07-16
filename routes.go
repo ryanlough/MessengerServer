@@ -36,4 +36,10 @@ var routes = Routes{
         "/posts",
         PostCreate,
     },
+    Route{
+        "PostRegister",
+        "POST",
+        "/register",
+        PostRegister,
+    },
 }
