@@ -108,5 +108,17 @@ func PostRegister(w http.ResponseWriter, r *http.Request) {
         }
     }
 
-    regIDs = append(regIDs, post.Message)
+    if !stringInSlice(post.Message, regIDs) {
+        regIDs = append(regIDs, post.Message)
+    }
+}
+
+// Returns true if the given string in in the given string slice.
+func stringInSlice(a string, list []string) bool {
+    for _, b := range list {
+        if b == a {
+            return true
+        }
+    }
+    return false
 }
